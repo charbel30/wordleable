@@ -1,0 +1,88 @@
+@import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: "Pacifico", cursive;
+}
+
+.wordle {
+  display: grid;
+  grid-gap: 10px;
+  padding: 0px;
+  font-size: 25px;
+  align-items: center;
+  justify-items: center;
+  letter-spacing: 30px;
+}
+.words {
+  display: flex;
+  padding: 10px;
+  flex-direction: rows;
+}
+
+.letter {
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  margin: 10px;
+  padding: 0 0 4px 0;
+  z-index: 1;
+}
+.dark-mode input {
+  width: 50px;
+  height: 50px;
+  padding: 0 10px;
+  font-size: inherit;
+  color: #dccca3;
+  background-color: #141415;
+  border: 2px solid #dccca3;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.4s linear;
+}
+ .dark-mode input:focus {
+  border: 2px solid #950740;
+  caret-color: #950740;
+  color: #950740;
+  box-shadow: 4px 4px 10px #070707;
+}
+
+.dark-mode .letter:focus-within {
+  transform: scale(1.1);
+
+  z-index: 2;
+  box-shadow: 4px 4px 15px #070707;
+  transition: 0.4s ease-in-out;
+  box-sizing: content-box;
+}
+
+input {
+  width: 50px;
+  height: 50px;
+  padding: 0 10px;
+  font-size: inherit;
+  color: #18181A;
+  background-color: #CDB57A;
+  border: 2px solid #18181A;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.4s linear;
+}
+input:focus {
+  border: 2px solid #000000;
+  color: #950740;
+  box-shadow: 4px 4px 10px #070707;
+
+  transition: 0.1s ease-in-out ;
+}
+
+.letter:focus-within {
+  transform: scale(1.1);
+ background-color: #18181A;
+ border-radius: 8px;
+  z-index: 2;
+  box-shadow: 12px 15px 15px #CDB57A;
+  transition: 0.2s ease-in-out;
+}
+

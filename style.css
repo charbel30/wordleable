@@ -1,0 +1,135 @@
+body{ 
+    margin: 0;
+    padding: 0;
+    font-family: 'Pacifico', cursive;
+    background-color: #DCCCA3 ;
+    color: #18181A;
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
+}
+body::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+}
+
+@media (prefers-color-scheme: dark){
+  .original{
+    
+    background-color: #DCCCA3;
+    color: #18181A;
+    transition: all 0.2s ease-in-out ;
+  }
+  .dark-mode{
+    background-color: #18181A;
+    color: #DCCCA3;
+    transition: all 0.2s ease-in-out ;
+  }
+  
+
+}
+@media (prefers-color-scheme: light){
+  .original{
+    background-color: #DCCCA3;
+    color: #18181A;
+    transition: all 0.2s ease-in-out ;
+  }
+  .dark-mode{
+    background-color: #18181A;
+    color: #DCCCA3;
+    transition: all 0.2s ease-in-out ;
+  }
+ 
+}
+header{
+    background-color: #950740;
+    padding: 1px;
+    text-align: center;
+    font-size: 20px;
+    color: #DCCCA3;
+
+}
+.dark-mode h1{
+  transition: all 0.2s ease-in-out;
+  color: #18181A;
+
+}
+
+/* Dark mode toggle */
+.dark-mode-toggle {
+  position: fixed;
+  top: 35px;
+  right: 60px;
+  z-index: 1000;
+  margin: 5px;
+ border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.dark-mode-toggle .icon {
+  position: relative;
+  font-size: 26px;
+  transition: all 0.2s ease-in-out;
+
+}
+.dark-mode-toggle .icon.lights {
+  color: #DCCCA3;
+  visibility: hidden;
+  z-index: 2;
+  transform: scale(0);
+  transition: all 0.2s ease-in-out ;
+}
+
+.dark-mode-toggle .icon.dark {
+  color: #18181A;
+  visibility: visible;
+  z-index: 1;
+  transition: all 0.2s ease-in-out ;
+}
+
+.dark-mode-toggle.active {
+  transform: rotate(180deg);
+}
+
+@keyframes sun-icon {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+ 
+
+
+}
+
+ .dark-mode .dark-mode-toggle .icon.lights:hover {
+
+  transition:  all 0.2s ease-in-out;
+  animation: sun-icon infinite 2s linear  ;
+
+}
+.dark-mode-toggle .icon.lights:hover{
+  transition:  all 0.2s ease-in-out;
+  animation: sun-icon infinite 2s linear  ;
+}
+
+
+
+ .dark-mode-toggle .icon.dark:hover {
+  transform: scale(1.2);
+  transition:  all 0.2s ease-in-out;
+}
+
+
+ .dark-mode-toggle.active .icon.lights {
+  visibility: visible;
+  transform: scale(1);
+  color: #DCCCA3;
+}
+
+.dark-mode-toggle.active .icon.dark {
+  visibility: hidden;
+  transform: scale(0);
+}
