@@ -1,3 +1,4 @@
+
 const body = document.getElementsByClassName("original");
 let lastInput;
 const black = "rgb(24, 24, 26)";
@@ -105,3 +106,48 @@ document.body.addEventListener("click", () => {
     inputs[0].focus();
   }
 });
+
+
+async function GetWord() {
+  const promise = await fetch("https://words.dev-apis.com/word-of-the-day");
+  const processedResponse = await promise.json();
+  const word = processedResponse.word;
+
+ 
+  return word;
+  
+}
+const WORD = GetWord().then((word) => {
+  console.log(word);
+ 
+ });
+
+
+ 
+
+ 
+
+
+//how to make a POST request
+/*async function PostWord() {
+  word = GetWord()
+  const promise = await fetch("https://words.dev-apis.com/validate-word", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ word: "" }),
+  });
+  const processedResponse = await promise.json();
+
+  console.log(processedResponse);
+
+}
+PostWord()
+*/
+
+
+
+
+
+
