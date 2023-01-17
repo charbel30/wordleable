@@ -1,12 +1,13 @@
 const body = document.getElementsByClassName("original");
 let lastInput;
 let rows = 0;
-
+correct = false;
 const black = "rgb(24, 24, 26)";
 const light = "rgb(220, 204, 163)";
 let row = document.querySelectorAll(".words ");
 let inputs = row[rows].querySelectorAll("input");
 let userword = "";
+let inputIndex = 0;
 
 function toggleDarkMode() {
   document.body.classList.toggle("dark-mode");
@@ -22,7 +23,6 @@ if (document.media.matches) {
   document.querySelector("main").classList.add("dark-modes");
 }
 
-//i want to add dark mode when i hover the button and when i unhover it goes back to normal  if it contains active class
 document
   .querySelector(".dark-mode-toggle")
   .addEventListener("click", toggleDarkMode);
@@ -31,37 +31,34 @@ document
 
 inputs[0].focus();
 
-for (let i = 0; i < inputs.length; i++) {
-  inputs[i].style.pointerEvents = "none";
-}
-console.log(inputs[rows]);
 let enterPressed = false;
 for (let i = 0; i < row.length; i++) {
   let inputs = row[i].querySelectorAll("input");
- 
+
   for (let i = 0; i < inputs.length; i++) {
     inputs[i].setAttribute("tabindex", "-1");
   }
 
- 
+  for (let i = 0; i < inputs.length; i++) {
+    inputs[i].style.pointerEvents = "none";
+  }
+
   inputs.forEach((input) => {
     input.addEventListener("keydown", (event) => {
-      if(rows < row.length){
-      inputs = row[rows].querySelectorAll("input");
-    }
-      input.addEventListener("input", () => {
-        lastInput = input;
-      });
+      if (rows < row.length) {
+        inputs = row[rows].querySelectorAll("input");
+      }
       input.addEventListener("input", (event) => {
         lastInput = event.target;
       });
-      if (isLetter(event.key) ) {
+      if (isLetter(event.key)) {
         handleLetter(event, input);
         lastInput = event.target;
       } else if (event.key === "Backspace") {
         handleBackspace(event, input);
       } else if (event.key === "Enter" && userword.length === 5) {
         nextLine(event, input);
+        checkWord();
         enterPressed = true;
       } else {
         handleOther(event);
@@ -71,22 +68,23 @@ for (let i = 0; i < row.length; i++) {
 }
 
 document.body.addEventListener("keyup", () => {
-  if (enterPressed && rows < row.length ) {
-    console.log(row.length === rows);
-    rows++;
-    if(rows < row.length){
-    inputs = row[rows].querySelectorAll("input");
+  if (enterPressed && rows < row.length) {
+    if (rows < row.length - 1) {
+      inputs = row[rows].querySelectorAll("input");
+      rows++;
     }
-    enterPressed = false;
-    console.log(inputs[rows]);
 
+    enterPressed = false;
   }
 });
 
 document.body.addEventListener("click", () => {
-  if (lastInput) {
+
+  console.log(inputIndex);
+  if (lastInput && inputIndex !== 0 && rows < row.length - 1) {
     lastInput.focus();
-  } else {
+  }
+  else {
     inputs[0].focus();
   }
 });
@@ -135,7 +133,7 @@ function handleLetter(event, input) {
   input.value = event.key;
   const inputValue = input.value;
   inputIndex = Array.from(inputs).indexOf(input);
-  
+
   if (userword.length < 5) {
     if (inputValue !== "") {
       userword =
@@ -146,7 +144,6 @@ function handleLetter(event, input) {
   }
   if (userword.length === 5) {
     userword = userword.slice(0, -1) + inputValue;
-  
   }
   console.log(inputIndex);
   console.log(userword);
@@ -157,7 +154,6 @@ function handleLetter(event, input) {
     nextInput.focus();
   }
 }
-
 function handleOther(event) {
   // Prevent the input of any non-letter characters
   if (event.key.length === 1) {
@@ -168,21 +164,37 @@ const WORD = GetWord().then((word) => {
   return word;
 });
 async function nextLine(event, target) {
-  if (event.key === "Enter" && target.value !== "" && rows < row.length ) {
-    userword = "";
+  if (event.key === "Enter" && target.value !== "" && rows < row.length) {
     inputIndex = 0;
-  event.preventDefault();
-  const nextrow = event.target.closest(".words").nextElementSibling;
-  const nextword = nextrow && nextrow.querySelector("input");
-  console.log(userword == (await WORD));
-  if (userword.length == 5) {
-    if (userword == GetWord()) {
+    event.preventDefault();
+    const nextrow = event.target.closest(".words").nextElementSibling;
+    const nextword = nextrow && nextrow.querySelector("input");
+    inputs = row[rows].querySelectorAll("input");
+   
+    if (nextword) {
+      nextword.focus();
     }
-  }
-  if (nextword) {
-    nextword.focus();
+
   }
 }
+
+async function checkWord() {
+  console.log(await GetWord());
+  if (userword === (await GetWord()) && userword.length === 5) {
+    if (rows < row.length - 1) {
+      inputs[rows].parentNode.parentNode.classList.add("correct");
+    } else {
+      inputs[rows - 1].parentNode.parentNode.classList.add("correct");
+    }
+    if (rows < row.length ) {
+      inputs = row[rows].querySelectorAll("input");
+    }
+  } else {
+    console.log("incorrect");
+  }
+  inputs = row[rows].querySelectorAll("input");
+  userword = "";
+  inputIndex = 0;
 }
 
 //how to make a POST request
