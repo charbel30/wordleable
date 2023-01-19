@@ -1,6 +1,6 @@
 body{ 
     margin: 0;
-    padding: 0;
+    padding: 0 ;
     font-family: 'Pacifico', cursive;
     background-color: #DCCCA3 ;
     color: #18181A;
@@ -44,6 +44,7 @@ body::-webkit-scrollbar {
 header{
     background-color: #950740;
     padding: 1px;
+    margin-bottom: 30px;
     text-align: center;
     font-size: 20px;
     color: #DCCCA3;
@@ -134,3 +135,4 @@ header{
   visibility: hidden;
   transform: scale(0);
 }
+

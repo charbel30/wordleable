@@ -125,50 +125,55 @@ async function nextLine(event, target) {
     inputIndex = 0;
     event.preventDefault();
     const nextrow = event.target.closest(".words").nextElementSibling;
-    const nextword = nextrow && nextrow.querySelector("input");
-    inputs = row[rows].querySelectorAll("input");
-
-    if (nextword) {
+    const nextword = (await nextrow) && nextrow.querySelector("input");
+    if (await nextword) {
       nextword.focus();
+      inputs = await row[rows].querySelectorAll("input");
     }
   }
 }
 
 async function checkWord() {
-  if (userword === (await GetWord()) && userword.length === 5) {
-    if (rows < row.length - 1) {
-      inputs[rows].parentNode.parentNode.classList.add("correct");
+  console.log(await PostWord());
+
+  if (await PostWord() && userword.length === 5) {
+    if (userword === (await GetWord()) && userword.length === 5 ) {
+      if (rows < row.length - 1) {
+        inputs[rows].parentNode.parentNode.classList.add("correct");
+      } else {
+        await inputs[rows - 1].parentNode.parentNode.classList.add("correct");
+      }
+      if (rows < row.length - 1) {
+        console.log(rows);
+        inputs = row[rows].querySelectorAll("input");
+      }
     } else {
-      inputs[rows - 1].parentNode.parentNode.classList.add("correct");
-    }
-    if (rows < row.length) {
-      inputs = row[rows].querySelectorAll("input");
+      console.log("incorrect word ");
     }
   } else {
-    console.log("incorrect");
+
+    console.log("not valid word");
+    inputs[rows].parentNode.parentNode.classList.add("incorrect");
+
   }
-  inputs = row[rows].querySelectorAll("input");
+
   userword = "";
   inputIndex = 0;
 }
 
 //how to make a POST request
-/*async function PostWord() {
-  word = GetWord()
+async function PostWord() {
   const promise = await fetch("https://words.dev-apis.com/validate-word", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ word: "" }),
+    body: JSON.stringify({ word: userword }),
   });
   const processedResponse = await promise.json();
-
-  console.log(processedResponse);
-
+  let valid = await processedResponse.validWord;
+  return valid;
 }
-PostWord()
-*/
 
 inputs[0].focus();
 
