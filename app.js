@@ -121,14 +121,26 @@ const WORD = GetWord().then((word) => {
   return word;
 });
 async function nextLine(event, target) {
-  if (event.key === "Enter" && target.value !== "" && rows < row.length) {
-    inputIndex = 0;
-    event.preventDefault();
-    const nextrow = event.target.closest(".words").nextElementSibling;
-    const nextword = (await nextrow) && nextrow.querySelector("input");
-    if (await nextword) {
-      nextword.focus();
-      inputs = await row[rows].querySelectorAll("input");
+  if (
+    event.key === "Enter" &&
+    (await target.value) !== "" &&
+    rows < row.length
+  ) {
+    await checkWord();
+    if (correct === true) {
+      inputIndex = 0;
+      event.preventDefault();
+      const nextrow = await event.target.closest(".words").nextElementSibling;
+      const nextword =
+        (await nextrow) && (await nextrow.querySelector("input"));
+      if (await nextword) {
+        setTimeout(() => {
+          nextword.focus();
+        }, 500);
+      
+      }
+    } else {
+      event.preventDefault();
     }
   }
 }
@@ -136,27 +148,38 @@ async function nextLine(event, target) {
 async function checkWord() {
   console.log(await PostWord());
 
-  if (await PostWord() && userword.length === 5) {
-    if (userword === (await GetWord()) && userword.length === 5 ) {
+  if ((await PostWord()) && userword.length === 5) {
+    if (userword === (await GetWord()) && userword.length === 5) {
       if (rows < row.length - 1) {
+        correct = true;
         inputs[rows].parentNode.parentNode.classList.add("correct");
       } else {
-        await inputs[rows - 1].parentNode.parentNode.classList.add("correct");
+        correct = true;
+        inputs[rows - 1].parentNode.parentNode.classList.add("correct");
       }
       if (rows < row.length - 1) {
-        console.log(rows);
         inputs = row[rows].querySelectorAll("input");
       }
     } else {
       console.log("incorrect word ");
+      correct = true;
+      if (rows < row.length - 1) {
+        inputs[rows].parentNode.parentNode.classList.add("incorrect");
+        inputs = row[rows].querySelectorAll("input");
+      } else {
+        inputs[rows - 1].parentNode.parentNode.classList.add("incorrect");
+        inputs = row[rows].querySelectorAll("input");
+      }
     }
-  } else {
-
-    console.log("not valid word");
-    inputs[rows].parentNode.parentNode.classList.add("incorrect");
-
   }
+  if ((await PostWord()) === false && userword.length === 5) {
+    correct = false;
+    console.log("not valid word");
+    console.log(rows);
+    console.log(correct);
 
+    await inputs[rows].parentNode.parentNode.classList.add("invalid");
+  }
   userword = "";
   inputIndex = 0;
 }
@@ -190,10 +213,7 @@ for (let i = 0; i < row.length; i++) {
   }
 
   inputs.forEach((input) => {
-    input.addEventListener("keydown", (event) => {
-      if (rows < row.length) {
-        inputs = row[rows].querySelectorAll("input");
-      }
+    input.addEventListener("keydown", async (event) => {
       input.addEventListener("input", (event) => {
         lastInput = event.target;
       });
@@ -203,9 +223,14 @@ for (let i = 0; i < row.length; i++) {
       } else if (event.key === "Backspace") {
         handleBackspace(event, input);
       } else if (event.key === "Enter" && userword.length === 5) {
-        nextLine(event, input);
-        checkWord();
-        enterPressed = true;
+        await nextLine(event, input);
+        if (correct === true) {
+          inputs = row[rows].querySelectorAll("input");
+          console.log(correct);
+          console.log(rows);
+          correct = false;
+          enterPressed = true;
+        }
       } else {
         handleOther(event);
       }
@@ -213,13 +238,13 @@ for (let i = 0; i < row.length; i++) {
   });
 }
 
-document.body.addEventListener("keyup", () => {
+document.body.addEventListener("keyup", async () => {
   if (enterPressed && rows < row.length) {
     if (rows < row.length - 1) {
-      inputs = row[rows].querySelectorAll("input");
       rows++;
+      inputs = row[rows].querySelectorAll("input");
     }
-
+   
     enterPressed = false;
   }
 });
