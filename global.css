@@ -100,7 +100,7 @@ input:focus {
   padding: 0 10px;
   text-transform: uppercase;
   font-size: inherit;
-  color: #DCCCA3;
+  color: #047c14;
   background-color: #18181A;
   border-radius: 8px;
   outline: none;
@@ -118,10 +118,10 @@ input:focus {
   transition: 0.2s ease-in-out;
 }
 .dark-modes .correct .letter {
- 
+  background-color: #1d1a1a;
   transform: scale(1.1);
   z-index: 2;
-  box-shadow: 4px 4px 15px #070707;
+  box-shadow: 6px 6px 23px #003107;
   transition: 0.4s ease-in-out;
   box-sizing: content-box;
 
@@ -133,15 +133,16 @@ input:focus {
   padding: 0 10px;
   text-transform: uppercase;
   font-size: inherit;
-  color: #950740;
+  color: #047c14;
   background-color: #18181A;
   border-radius: 8px;
   outline: none;
+  box-shadow: 8px 7px 12px #002707;
   border: 2px solid #047c14;
   outline: none;
   transition: 0.4s linear;
 }
-.incorrect input{
+.invalid input{
   width: 50px;
   height: 50px;
   padding: 0 10px;
@@ -155,12 +156,12 @@ input:focus {
   transition: 0.4s linear;
   animation: incorrect 0.5s linear  ;
 }
-.incorrect .letter{
+.invalid .letter{
   border-radius: 8px;
   z-index: 2;
   transition:  0.4s linear;
 }
-.dark-modes .incorrect .letter {
+.dark-modes .invalid .letter {
  
   transform: scale(1.1);
   z-index: 2;
@@ -170,7 +171,7 @@ input:focus {
 
 }
 
-.dark-modes .incorrect input {
+.dark-modes .invalid input {
   width: 50px;
   height: 50px;
   padding: 0 10px;
@@ -204,4 +205,56 @@ input:focus {
     border-radius: 8px; 
   }
   
+}
+
+
+.incorrect input{
+  width: 50px;
+  height: 50px;
+  padding: 0 10px;
+  text-transform: uppercase;
+  font-size: inherit;
+  color: #18181A;
+  background-color: #CDB57A;
+  border-radius: 8px;
+  outline: none;
+  border: 2px solid #950740;
+  box-shadow: 4px 4px 18px #380017;
+  outline: none;
+  transition: 0.4s linear;
+  
+}
+.incorrect .letter {
+  transform: scale(1.1);
+  background-color: #18181A;
+  border-radius: 8px;
+  z-index: 2;
+  box-shadow: 12px 15px 15px #CDB57A;
+  transition: 0.2s ease-in-out;
+}
+.dark-modes .incorrect .letter {
+  background-color: #1d1a1a;
+  transform: scale(1.1);
+  z-index: 2;
+  box-shadow: 4px 4px 18px #380017;
+  transition: 0.4s ease-in-out;
+  box-sizing: content-box;
+
+}
+
+.dark-modes .incorrect input {
+  width: 50px;
+  height: 50px;
+  padding: 0 10px;
+  transform: scale(1.01);
+  text-transform: uppercase;
+  font-size: inherit;
+  color: #950740;
+  background-color: #18181A;
+  border-radius: 8px;
+  outline: none;
+  border: 2px solid #950740;
+  box-shadow: 8px 7px 12px #22000e;
+  outline: none;
+  transition: 0.4s linear;
 }

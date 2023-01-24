@@ -153,9 +153,15 @@ async function checkWord() {
       if (rows < row.length - 1) {
         correct = true;
         inputs[rows].parentNode.parentNode.classList.add("correct");
+        await inputs[rows].parentNode.parentNode.classList.remove("invalid");
+        userword = "";
+        inputIndex = 0;
       } else {
         correct = true;
         inputs[rows - 1].parentNode.parentNode.classList.add("correct");
+        await inputs[rows].parentNode.parentNode.classList.remove("invalid");
+        userword = "";
+        inputIndex = 0;
       }
       if (rows < row.length - 1) {
         inputs = row[rows].querySelectorAll("input");
@@ -165,23 +171,31 @@ async function checkWord() {
       correct = true;
       if (rows < row.length - 1) {
         inputs[rows].parentNode.parentNode.classList.add("incorrect");
+        await inputs[rows].parentNode.parentNode.classList.remove("invalid");
         inputs = row[rows].querySelectorAll("input");
+        userword = "";
+        inputIndex = 0;
       } else {
+        await inputs[rows].parentNode.parentNode.classList.remove("invalid");
         inputs[rows - 1].parentNode.parentNode.classList.add("incorrect");
         inputs = row[rows].querySelectorAll("input");
+        userword = "";
+        inputIndex = 0;
       }
     }
   }
-  if ((await PostWord()) === false && userword.length === 5) {
+  else if ((  await PostWord()) === false && userword.length === 5) {
     correct = false;
     console.log("not valid word");
     console.log(rows);
     console.log(correct);
 
     await inputs[rows].parentNode.parentNode.classList.add("invalid");
+    setTimeout(() => {
+      inputs[rows].parentNode.parentNode.classList.remove("invalid");
+    }, 500);
   }
-  userword = "";
-  inputIndex = 0;
+ 
 }
 
 //how to make a POST request
