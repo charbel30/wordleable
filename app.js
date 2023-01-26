@@ -6,12 +6,14 @@ let lastInput;
 let rows = 0;
 // Create a variable that holds the status of the input
 let correct = false;
+let finalword = false;
 // Create a variable that holds the color of the correct input
 const black = "rgb(24, 24, 26)";
 // Create a variable that holds the color of the incorrect input
 const light = "rgb(220, 204, 163)";
 // Create a variable that holds the number of rows
 let row = document.querySelectorAll(".words ");
+let wordle = document.querySelector(".wordle").querySelectorAll("input");
 // Create a variable that holds the number of inputs
 let inputs = row[rows].querySelectorAll("input");
 // Create a variable that holds the word that the user inputs
@@ -52,7 +54,6 @@ async function GetWord() {
 
   return word;
 }
-
 // This function returns true if the argument is a letter and false if it is not.
 
 function isLetter(letter) {
@@ -152,16 +153,24 @@ async function checkWord() {
     if (userword === (await GetWord()) && userword.length === 5) {
       if (rows < row.length - 1) {
         correct = true;
+        finalword = true;
         inputs[rows].parentNode.parentNode.classList.add("correct");
         await inputs[rows].parentNode.parentNode.classList.remove("invalid");
         userword = "";
         inputIndex = 0;
+        for (var i = 0; i < wordle.length; i++) {
+          wordle[i].disabled = true;
+      }
+   
       } else {
         correct = true;
+        finalword = true;
         inputs[rows - 1].parentNode.parentNode.classList.add("correct");
-        await inputs[rows].parentNode.parentNode.classList.remove("invalid");
         userword = "";
         inputIndex = 0;
+        for (var i = 0; i < wordle.length; i++) {
+          wordle[i].disabled = true;
+      }
       }
       if (rows < row.length - 1) {
         inputs = row[rows].querySelectorAll("input");
@@ -175,6 +184,7 @@ async function checkWord() {
         inputs = row[rows].querySelectorAll("input");
         userword = "";
         inputIndex = 0;
+    
       } else {
         await inputs[rows].parentNode.parentNode.classList.remove("invalid");
         inputs[rows - 1].parentNode.parentNode.classList.add("incorrect");
@@ -238,7 +248,7 @@ for (let i = 0; i < row.length; i++) {
         handleBackspace(event, input);
       } else if (event.key === "Enter" && userword.length === 5) {
         await nextLine(event, input);
-        if (correct === true) {
+        if (correct === true ) {
           inputs = row[rows].querySelectorAll("input");
           console.log(correct);
           console.log(rows);
@@ -253,7 +263,7 @@ for (let i = 0; i < row.length; i++) {
 }
 
 document.body.addEventListener("keyup", async () => {
-  if (enterPressed && rows < row.length) {
+  if (enterPressed && rows < row.length  ) {
     if (rows < row.length - 1) {
       rows++;
       inputs = row[rows].querySelectorAll("input");
