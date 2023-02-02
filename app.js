@@ -103,7 +103,7 @@ function handleLetter(event, input) {
   if (userword.length === 5) {
     userword = userword.slice(0, -1) + inputValue;
   }
-  console.log(inputIndex);
+  /*console.log(inputIndex);*/
   console.log(userword);
 
   const nextDiv = input.parentNode.nextElementSibling;
@@ -138,7 +138,6 @@ async function nextLine(event, target) {
         setTimeout(() => {
           nextword.focus();
         }, 500);
-      
       }
     } else {
       event.preventDefault();
@@ -147,7 +146,6 @@ async function nextLine(event, target) {
 }
 
 async function checkWord() {
-  console.log(await PostWord());
 
   if ((await PostWord()) && userword.length === 5) {
     if (userword === (await GetWord()) && userword.length === 5) {
@@ -160,8 +158,7 @@ async function checkWord() {
         inputIndex = 0;
         for (var i = 0; i < wordle.length; i++) {
           wordle[i].disabled = true;
-      }
-   
+        }
       } else {
         correct = true;
         finalword = true;
@@ -170,7 +167,7 @@ async function checkWord() {
         inputIndex = 0;
         for (var i = 0; i < wordle.length; i++) {
           wordle[i].disabled = true;
-      }
+        }
       }
       if (rows < row.length - 1) {
         inputs = row[rows].querySelectorAll("input");
@@ -178,36 +175,56 @@ async function checkWord() {
     } else {
       console.log("incorrect word ");
       correct = true;
+      let correctword = await GetWord();
+      for (let i = 0; i < userword.length; i++) {
+        if(correctword.includes(userword[i]))
+        { 
+          if (userword[i] == (await GetWord())[i]) {
+
+          inputs[i].parentNode.classList.add("correct-place");
+        }else{
+          inputs[i].parentNode.classList.add("incorrect-place");
+        }
+
+          
+        }
+       
+      }
       if (rows < row.length - 1) {
         inputs[rows].parentNode.parentNode.classList.add("incorrect");
         await inputs[rows].parentNode.parentNode.classList.remove("invalid");
         inputs = row[rows].querySelectorAll("input");
         userword = "";
         inputIndex = 0;
-    
       } else {
-        await inputs[rows].parentNode.parentNode.classList.remove("invalid");
+        await inputs[rows - 1].parentNode.parentNode.classList.remove(
+          "invalid"
+        );
         inputs[rows - 1].parentNode.parentNode.classList.add("incorrect");
         inputs = row[rows].querySelectorAll("input");
+        for (var i = 0; i < wordle.length; i++) {
+          wordle[i].disabled = true;
+        }
         userword = "";
         inputIndex = 0;
       }
     }
-  }
-  else if ((  await PostWord()) === false && userword.length === 5) {
+  } else if ((await PostWord()) === false && userword.length === 5) {
     correct = false;
     console.log("not valid word");
-    console.log(rows);
-    console.log(correct);
-
-    await inputs[rows].parentNode.parentNode.classList.add("invalid");
-    setTimeout(() => {
-      inputs[rows].parentNode.parentNode.classList.remove("invalid");
-    }, 500);
+    if (rows < row.length - 1) {
+      await inputs[rows].parentNode.parentNode.classList.add("invalid");
+      setTimeout(() => {
+        inputs[rows].parentNode.parentNode.classList.remove("invalid");
+      }, 500);
+    } else {
+      await inputs[rows - 1].parentNode.parentNode.classList.add("invalid");
+      setTimeout(() => {
+        inputs[rows - 1].parentNode.parentNode.classList.remove("invalid");
+      }, 500);
+    }
   }
- 
 }
-
 //how to make a POST request
 async function PostWord() {
   const promise = await fetch("https://words.dev-apis.com/validate-word", {
@@ -248,10 +265,8 @@ for (let i = 0; i < row.length; i++) {
         handleBackspace(event, input);
       } else if (event.key === "Enter" && userword.length === 5) {
         await nextLine(event, input);
-        if (correct === true ) {
+        if (correct === true) {
           inputs = row[rows].querySelectorAll("input");
-          console.log(correct);
-          console.log(rows);
           correct = false;
           enterPressed = true;
         }
@@ -263,12 +278,12 @@ for (let i = 0; i < row.length; i++) {
 }
 
 document.body.addEventListener("keyup", async () => {
-  if (enterPressed && rows < row.length  ) {
+  if (enterPressed && rows < row.length) {
     if (rows < row.length - 1) {
       rows++;
       inputs = row[rows].querySelectorAll("input");
     }
-   
+
     enterPressed = false;
   }
 });

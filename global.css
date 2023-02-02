@@ -20,7 +20,7 @@
 .words {
   display: flex;
   padding: 10px;
-  flex-direction: rows;
+
 }
 
 .letter {
@@ -121,7 +121,7 @@ input:focus {
   background-color: #1d1a1a;
   transform: scale(1.1);
   z-index: 2;
-  box-shadow: 6px 6px 23px #003107;
+  box-shadow: 6px 6px 23px #046110;
   transition: 0.4s ease-in-out;
   box-sizing: content-box;
 
@@ -137,10 +137,10 @@ input:focus {
   background-color: #18181A;
   border-radius: 8px;
   outline: none;
-  box-shadow: 8px 7px 12px #002707;
+  box-shadow: 8px 7px 12px #047c14;
   border: 2px solid #047c14;
   outline: none;
-  transition: 0.4s linear;
+  transition: all 0.4s ease;
 }
 .invalid input{
   width: 50px;
@@ -159,7 +159,7 @@ input:focus {
 .invalid .letter{
   border-radius: 8px;
   z-index: 2;
-  transition:  0.4s linear;
+  transition: all 0.4s ease;
 }
 .dark-modes .invalid .letter {
  
@@ -183,7 +183,7 @@ input:focus {
   outline: none;
   border: 2px solid #18181A;
   outline: none;
-  transition: 0.4s linear;
+  transition: all 0.4s ease;
   animation: incorrect 0.5s ease-in-out  ;
 }
 
@@ -208,7 +208,7 @@ input:focus {
 }
 
 
-.incorrect input{
+.incorrect > input{
   width: 50px;
   height: 50px;
   padding: 0 10px;
@@ -221,7 +221,7 @@ input:focus {
   border: 2px solid #950740;
   box-shadow: 4px 4px 18px #380017;
   outline: none;
-  transition: 0.4s linear;
+  transition: all 0.4s ease;
   
 }
 .incorrect .letter {
@@ -236,7 +236,7 @@ input:focus {
   background-color: #1d1a1a;
   transform: scale(1.1);
   z-index: 2;
-  box-shadow: 4px 4px 18px #380017;
+  box-shadow: 6px 6px 23px #5f0429;
   transition: 0.4s ease-in-out;
   box-sizing: content-box;
 
@@ -254,7 +254,48 @@ input:focus {
   border-radius: 8px;
   outline: none;
   border: 2px solid #950740;
-  box-shadow: 8px 7px 12px #22000e;
+  box-shadow: 8px 7px 12px #950740;
   outline: none;
-  transition: 0.4s linear;
+  transition: all 0.4s ease;
 }
+
+
+.incorrect  > .correct-place {
+
+  background-color: #18181A;
+}
+
+.incorrect > .correct-place > input { 
+  color: #047c14;
+  background-color: #18181A;
+  border: 2px solid #047c14;
+}
+
+.dark-modes .incorrect  > .correct-place{
+  box-shadow: 6px 6px 23px #046110;
+}
+.dark-modes .incorrect  > .correct-place > input {
+  box-shadow: 8px 7px 12px #047c14;
+}
+
+.incorrect  > .incorrect-place {
+
+  background-color: #18181A;
+}
+
+.incorrect > .incorrect-place > input { 
+  color: #cfd304;
+  background-color: #18181A;
+  border: 2px solid #cfd304;
+}
+
+.dark-modes .incorrect  > .incorrect-place{
+  box-shadow: 6px 6px 23px #9c9e04;
+}
+.dark-modes .incorrect  > .incorrect-place > input {
+  box-shadow: 8px 7px 12px #cfd304;
+}
+
+
+
+
