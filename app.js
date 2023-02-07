@@ -7,6 +7,7 @@ let rows = 0;
 // Create a variable that holds the status of the input
 let correct = false;
 let finalword = false;
+let nextline = false;
 // Create a variable that holds the color of the correct input
 const black = "rgb(24, 24, 26)";
 // Create a variable that holds the color of the incorrect input
@@ -146,7 +147,6 @@ async function nextLine(event, target) {
 }
 
 async function checkWord() {
-
   if ((await PostWord()) && userword.length === 5) {
     if (userword === (await GetWord()) && userword.length === 5) {
       if (rows < row.length - 1) {
@@ -177,18 +177,13 @@ async function checkWord() {
       correct = true;
       let correctword = await GetWord();
       for (let i = 0; i < userword.length; i++) {
-        if(correctword.includes(userword[i]))
-        { 
+        if (correctword.includes(userword[i])) {
           if (userword[i] == (await GetWord())[i]) {
-
-          inputs[i].parentNode.classList.add("correct-place");
-        }else{
-          inputs[i].parentNode.classList.add("incorrect-place");
+            inputs[i].parentNode.classList.add("correct-place");
+          } else {
+            inputs[i].parentNode.classList.add("incorrect-place");
+          }
         }
-
-          
-        }
-       
       }
       if (rows < row.length - 1) {
         inputs[rows].parentNode.parentNode.classList.add("incorrect");
@@ -255,8 +250,9 @@ for (let i = 0; i < row.length; i++) {
 
   inputs.forEach((input) => {
     input.addEventListener("keydown", async (event) => {
-      input.addEventListener("input", (event) => {
+      input.addEventListener("input", async (event) => {
         lastInput = event.target;
+        console.log(lastInput);
       });
       if (isLetter(event.key)) {
         handleLetter(event, input);
@@ -264,11 +260,13 @@ for (let i = 0; i < row.length; i++) {
       } else if (event.key === "Backspace") {
         handleBackspace(event, input);
       } else if (event.key === "Enter" && userword.length === 5) {
+        lastInput = event.target;
         await nextLine(event, input);
         if (correct === true) {
           inputs = row[rows].querySelectorAll("input");
           correct = false;
           enterPressed = true;
+          nextline = true;
         }
       } else {
         handleOther(event);
@@ -279,21 +277,25 @@ for (let i = 0; i < row.length; i++) {
 
 document.body.addEventListener("keyup", async () => {
   if (enterPressed && rows < row.length) {
+
     if (rows < row.length - 1) {
       rows++;
       inputs = row[rows].querySelectorAll("input");
+     
     }
 
     enterPressed = false;
   }
 });
-
 document.body.addEventListener("click", () => {
   if (lastInput && inputIndex !== 0 && rows < row.length - 1) {
     lastInput.focus();
-  } else if (lastInput && inputIndex !== 0 && rows === row.length - 1) {
-    lastInput.focus();
-  } else {
-    inputs[0].focus();
+  } 
+   else if(lastInput && rows < row.length - 1 && (inputIndex == 0) && nextline === true)  {
+    row[rows+ 1].querySelectorAll("input")[0].focus();  
+  }
+  if (rows == 0 && inputIndex == 0 && nextline === false)
+  {
+    row[rows].querySelectorAll("input")[0].focus();
   }
 });
