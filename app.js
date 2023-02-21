@@ -21,6 +21,9 @@ let inputs = row[rows].querySelectorAll("input");
 let userword = "";
 // Create a variable that holds the index of the input
 let inputIndex = 0;
+const WORD = GetWord().then((word) => {
+  return word;
+});
 
 // This function toggles the css class "dark-mode" on the body element. This class sets the background color to black and the text color to white.
 // It also toggles the "active" class on the dark-mode-toggle button, which changes the background color to white and the text color to black.
@@ -49,12 +52,12 @@ document
 // This function gets a random word from a website
 // and returns it
 async function GetWord() {
-  const promise = await fetch("https://words.dev-apis.com/word-of-the-day");
+  const promise = await fetch("https://words.dev-apis.com/word-of-the-day?random=1");
   const processedResponse = await promise.json();
   const word = processedResponse.word;
-
   return word;
 }
+
 // This function returns true if the argument is a letter and false if it is not.
 
 function isLetter(letter) {
@@ -119,9 +122,7 @@ function handleOther(event) {
     event.preventDefault();
   }
 }
-const WORD = GetWord().then((word) => {
-  return word;
-});
+
 async function nextLine(event, target) {
   if (
     event.key === "Enter" &&
