@@ -1,5 +1,10 @@
 // Create a variable that gets all the body elements
 const body = document.getElementsByClassName("original");
+//checks if mobile device is being used
+const isMobile =
+  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
 // Create a variable that holds the last input
 let lastInput;
 // Create a variable that holds the number of rows
@@ -21,7 +26,6 @@ let inputs = row[rows].querySelectorAll("input");
 let userword = "";
 // Create a variable that holds the index of the input
 let inputIndex = 0;
-
 
 // This function toggles the css class "dark-mode" on the body element. This class sets the background color to black and the text color to white.
 // It also toggles the "active" class on the dark-mode-toggle button, which changes the background color to white and the text color to black.
@@ -52,11 +56,12 @@ console.log(randnum);
 // This function gets a random word from a website
 // and returns it
 async function GetWord() {
-  const promise = await fetch(`https://words.dev-apis.com/word-of-the-day?puzzle=${randnum}`);
+  const promise = await fetch(
+    `https://words.dev-apis.com/word-of-the-day?puzzle=${randnum}`
+  );
   const processedResponse = await promise.json();
   word = processedResponse.word;
   return word;
-  
 }
 // This function returns true if the argument is a letter and false if it is not.
 
@@ -280,11 +285,9 @@ for (let i = 0; i < row.length; i++) {
 
 document.body.addEventListener("keyup", async () => {
   if (enterPressed && rows < row.length) {
-
     if (rows < row.length - 1) {
       rows++;
       inputs = row[rows].querySelectorAll("input");
-     
     }
 
     enterPressed = false;
@@ -293,12 +296,49 @@ document.body.addEventListener("keyup", async () => {
 document.body.addEventListener("click", () => {
   if (lastInput && inputIndex !== 0 && rows < row.length - 1) {
     lastInput.focus();
-  } 
-   else if(lastInput && rows < row.length - 1 && (inputIndex == 0) && nextline === true)  {
-    row[rows+ 1].querySelectorAll("input")[0].focus();  
+  } else if (
+    lastInput &&
+    rows < row.length - 1 &&
+    inputIndex == 0 &&
+    nextline === true
+  ) {
+    row[rows + 1].querySelectorAll("input")[0].focus();
   }
-  if (rows == 0 && inputIndex == 0 && nextline === false)
-  {
+  if (rows == 0 && inputIndex == 0 && nextline === false) {
     row[rows].querySelectorAll("input")[0].focus();
   }
 });
+
+if (isMobile) {
+  console.log("mobile");
+  inputs[0].focus();
+  inputs.forEach((input) => {
+    input.addEventListener("input", async (event) => {
+      input.addEventListener("keyup", async (next) => {
+        input.addEventListener("input", async (event) => {
+          lastInput = event.target;
+          console.log(lastInput);
+        });
+        if (isLetter(event.key)) {
+          handleLetter(event, input);
+          lastInput = event.target;
+        } else if (event.key === "Backspace") {
+          handleBackspace(event, input);
+        } else if (next.key === "Enter" && userword.length === 5) {
+          lastInput = event.target;
+          await nextLine(event, input);
+          if (correct === true) {
+            inputs = row[rows].querySelectorAll("input");
+            correct = false;
+            enterPressed = true;
+            nextline = true;
+          }
+        } else {
+          handleOther(event);
+        }
+      });
+    });
+  });
+}
+
+// Code to run if the screen width is less than or equal to 768px
