@@ -2,8 +2,7 @@
 * {
   box-sizing: border-box;
   scroll-behavior: smooth;
-  font-family: "Pacifico", cursive;
-  
+  font-family: "Pacifico", cursive; 
 }
 
 .wordle {

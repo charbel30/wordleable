@@ -130,4 +130,42 @@ header{
   visibility: hidden;
   transform: scale(0);
 }
+@media (max-width: 768px) {
+ 
+  .dark-mode-toggle {
+    position: fixed;
+    top: 5vh;
+    right: 6.6vw;
+    z-index: 1000;
+    margin: 5px;
+   
+   border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  *:focus{
+    outline: none !important;
+  }
+}
+@media (max-width: 768px) {
+  .wordle {
+    font-size: 20px;
+    letter-spacing: 20px;
+  }
 
+
+  input {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+    border-radius: 8px;
+  }
+
+  .dark-mode input {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+    border-radius: 8px;
+  }
+}
