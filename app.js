@@ -242,11 +242,80 @@ async function PostWord() {
   return valid;
 }
 //desktop version of the game
-if(!isMobile){
+if (!isMobile) {
+  inputs[0].focus();
 
-inputs[0].focus();
+  let enterPressed = false;
+  for (let i = 0; i < row.length; i++) {
+    let inputs = row[i].querySelectorAll("input");
 
-let enterPressed = false;
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].setAttribute("tabindex", "-1");
+    }
+
+    for (let i = 0; i < inputs.length; i++) {
+      inputs[i].style.pointerEvents = "none";
+    }
+
+    inputs.forEach((input) => {
+      input.addEventListener("keydown", async (event) => {
+        input.addEventListener("input", async (event) => {
+          lastInput = event.target;
+          console.log(lastInput);
+        });
+        if (isLetter(event.key)) {
+          handleLetter(event, input);
+          lastInput = event.target;
+        } else if (event.key === "Backspace") {
+          handleBackspace(event, input);
+        } else if (event.key === "Enter" && userword.length === 5) {
+          lastInput = event.target;
+          await nextLine(event, input);
+          if (correct === true) {
+            inputs = row[rows].querySelectorAll("input");
+            correct = false;
+            enterPressed = true;
+            nextline = true;
+          }
+        } else {
+          handleOther(event);
+        }
+      });
+    });
+  }
+
+  document.body.addEventListener("keyup", async () => {
+    if (enterPressed && rows < row.length) {
+      if (rows < row.length - 1) {
+        rows++;
+        inputs = row[rows].querySelectorAll("input");
+      }
+
+      enterPressed = false;
+    }
+  });
+  document.body.addEventListener("click", () => {
+    if (lastInput && inputIndex !== 0 && rows < row.length - 1) {
+      lastInput.focus();
+    } else if (
+      lastInput &&
+      rows < row.length - 1 &&
+      inputIndex == 0 &&
+      nextline === true
+    ) {
+      row[rows + 1].querySelectorAll("input")[0].focus();
+    }
+    if (rows == 0 && inputIndex == 0 && nextline === false) {
+      row[rows].querySelectorAll("input")[0].focus();
+    }
+  });
+}
+
+//mobile version of the game
+else {
+  inputs[0].focus();
+
+  let enterPressed = false;
 for (let i = 0; i < row.length; i++) {
   let inputs = row[i].querySelectorAll("input");
 
@@ -258,18 +327,27 @@ for (let i = 0; i < row.length; i++) {
     inputs[i].style.pointerEvents = "none";
   }
 
+  console.log("mobile");
+
   inputs.forEach((input) => {
-    input.addEventListener("keydown", async (event) => {
-      input.addEventListener("input", async (event) => {
-        lastInput = event.target;
-        console.log(lastInput);
-      });
-      if (isLetter(event.key)) {
+    input.addEventListener("input", async (event) => {
+      if (isLetter(event.data)) {
         handleLetter(event, input);
         lastInput = event.target;
-      } else if (event.key === "Backspace") {
+        input.blur();
+        let nextInput = input.nextElementSibling;
+        if (nextInput) {
+          nextInput.focus();
+        }
+      } else if (event.inputType === "deleteContentBackward") {
         handleBackspace(event, input);
-      } else if (event.key === "Enter" && userword.length === 5) {
+      } else {
+        handleOther(event);
+      }
+    });
+
+    input.addEventListener("keyup", async (event) => {
+      if (event.key === "Enter" && userword.length === 5) {
         lastInput = event.target;
         await nextLine(event, input);
         if (correct === true) {
@@ -278,13 +356,10 @@ for (let i = 0; i < row.length; i++) {
           enterPressed = true;
           nextline = true;
         }
-      } else {
-        handleOther(event);
       }
     });
   });
 }
-
 document.body.addEventListener("keyup", async () => {
   if (enterPressed && rows < row.length) {
     if (rows < row.length - 1) {
@@ -310,80 +385,7 @@ document.body.addEventListener("click", () => {
     row[rows].querySelectorAll("input")[0].focus();
   }
 });
-}
 
-//mobile version of the game 
-else{
-  inputs[0].focus();
-
-let enterPressed = false;
-for (let i = 0; i < row.length; i++) {
-  let inputs = row[i].querySelectorAll("input");
-
-  for (let i = 0; i < inputs.length; i++) {
-    inputs[i].setAttribute("tabindex", "-1");
-  }
-
-  for (let i = 0; i < inputs.length; i++) {
-    inputs[i].style.pointerEvents = "none";
-  }
-
-  console.log("mobile");
-
-  inputs.forEach((input) => {
-    input.addEventListener("input", async (event) => {
-      input.addEventListener("keyup", async (next) => {
-        input.addEventListener("input", async (event) => {
-          lastInput = event.target;
-          console.log(lastInput);
-        });
-        if (isLetter(event.key)) {
-          handleLetter(event, input);
-          lastInput = event.target;
-        } else if (event.key === "Backspace") {
-          handleBackspace(event, input);
-        } else if (next.key === "Enter" && userword.length === 5) {
-          lastInput = event.target;
-          await nextLine(event, input);
-          if (correct === true) {
-            inputs = row[rows].querySelectorAll("input");
-            correct = false;
-            enterPressed = true;
-            nextline = true;
-          }
-        } else {
-          handleOther(event);
-        }
-      });
-    });
-  });
-}
-  document.body.addEventListener("keyup", async () => {
-    if (enterPressed && rows < row.length) {
-      if (rows < row.length - 1) {
-        rows++;
-        inputs = row[rows].querySelectorAll("input");
-      }
-  
-      enterPressed = false;
-    }
-  });
-  document.body.addEventListener("click", () => {
-    if (lastInput && inputIndex !== 0 && rows < row.length - 1) {
-      lastInput.focus();
-    } else if (
-      lastInput &&
-      rows < row.length - 1 &&
-      inputIndex == 0 &&
-      nextline === true
-    ) {
-      row[rows + 1].querySelectorAll("input")[0].focus();
-    }
-    if (rows == 0 && inputIndex == 0 && nextline === false) {
-      row[rows].querySelectorAll("input")[0].focus();
-    }
-  });
- 
 }
 
 // Code to run if the screen width is less than or equal to 768px
