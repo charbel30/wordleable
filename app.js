@@ -241,6 +241,8 @@ async function PostWord() {
   let valid = await processedResponse.validWord;
   return valid;
 }
+//desktop version of the game
+if(!isMobile){
 
 inputs[0].focus();
 
@@ -308,10 +310,26 @@ document.body.addEventListener("click", () => {
     row[rows].querySelectorAll("input")[0].focus();
   }
 });
+}
 
-if (isMobile) {
-  console.log("mobile");
+//mobile version of the game 
+else{
   inputs[0].focus();
+
+let enterPressed = false;
+for (let i = 0; i < row.length; i++) {
+  let inputs = row[i].querySelectorAll("input");
+
+  for (let i = 0; i < inputs.length; i++) {
+    inputs[i].setAttribute("tabindex", "-1");
+  }
+
+  for (let i = 0; i < inputs.length; i++) {
+    inputs[i].style.pointerEvents = "none";
+  }
+
+  console.log("mobile");
+
   inputs.forEach((input) => {
     input.addEventListener("input", async (event) => {
       input.addEventListener("keyup", async (next) => {
@@ -339,6 +357,33 @@ if (isMobile) {
       });
     });
   });
+}
+  document.body.addEventListener("keyup", async () => {
+    if (enterPressed && rows < row.length) {
+      if (rows < row.length - 1) {
+        rows++;
+        inputs = row[rows].querySelectorAll("input");
+      }
+  
+      enterPressed = false;
+    }
+  });
+  document.body.addEventListener("click", () => {
+    if (lastInput && inputIndex !== 0 && rows < row.length - 1) {
+      lastInput.focus();
+    } else if (
+      lastInput &&
+      rows < row.length - 1 &&
+      inputIndex == 0 &&
+      nextline === true
+    ) {
+      row[rows + 1].querySelectorAll("input")[0].focus();
+    }
+    if (rows == 0 && inputIndex == 0 && nextline === false) {
+      row[rows].querySelectorAll("input")[0].focus();
+    }
+  });
+ 
 }
 
 // Code to run if the screen width is less than or equal to 768px
