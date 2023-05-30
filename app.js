@@ -310,7 +310,7 @@ if (!isMobile) {
     }
   });
 }
-
+/*
 //mobile version of the game
 else {
   inputs[0].focus();
@@ -387,5 +387,5 @@ document.body.addEventListener("click", () => {
 });
 
 }
-
+*/
 // Code to run if the screen width is less than or equal to 768px
